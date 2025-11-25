@@ -1,0 +1,11 @@
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    image: kb-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/kbalyzer:/app/kbalyzer
+    command: uvicorn kbalyzer.main:app --host 0.0.0.0 --port 8000 --reload
