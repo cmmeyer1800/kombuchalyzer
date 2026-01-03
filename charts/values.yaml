@@ -83,3 +83,21 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+
+# To be used for server configuration settings once added
+serverConfig:
+
+backend:
+  existingSecret: ""
+  # MUST override
+  secret_key:
+  first_superuser_email_key:
+  first_superuser_password_key:
+
+postgres:
+  enabled: false
+  storage:
+    size: 16Gi
+    storageClass: longhorn2
+  image:
+    repository: ""

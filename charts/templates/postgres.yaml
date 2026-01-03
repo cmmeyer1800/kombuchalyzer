@@ -1,0 +1,18 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "kombuchalyzer.fullname" . }}-postgres
+spec:
+  instances: 1
+
+  storage:
+    size: {{ .Values.postgres.storage.size }}
+    storageClass: {{ .Values.postgres.storage.storageClass }}
+
+  imageName: {{ .Values.postgres.image.repository | default "ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3" }}
+
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
+{{- end }}

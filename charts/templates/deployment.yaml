@@ -35,6 +35,51 @@ spec:
           {{- end }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_HOST
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- else }}
+            - name: POSTGRES_DB
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- else }}
+            - name: POSTGRES_USER
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- else }}
+            - name: POSTGRES_PASSWORD
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- else }}
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.existingSecret }}
+                  key: secret_key
+            - name: FIRST_SUPERUSER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.existingSecret }}
+                  key: first_superuser_email_key
+            - name: FIRST_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.existingSecret }}
+                  key: first_superuser_password_key
+
           ports:
             - name: http
               containerPort: 8000
