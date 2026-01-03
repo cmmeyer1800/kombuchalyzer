@@ -45,9 +45,11 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+          serviceName: kombuchalyzer-frontend
 
         - path: /api
           pathType: Prefix
+          serviceName: kombuchalyzer-backend
 
   tls: []
   #  - secretName: chart-example-tls
