@@ -19,6 +19,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        app.kubernetes.io/name: {{ include "kombuchalyzer.name" . }}-backend
+        app.kubernetes.io/instance: {{ .Release.Name }}-backend
         {{- include "kombuchalyzer.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
