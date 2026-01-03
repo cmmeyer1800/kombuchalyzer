@@ -64,7 +64,7 @@ spec:
                   key: password
                   name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
               {{- end }}
-            - name: SECRET
+            - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.backend.existingSecret }}
