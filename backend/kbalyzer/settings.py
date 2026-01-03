@@ -11,12 +11,12 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file="./.env", env_file_encoding="utf-8", case_sensitive=True)
 
     # General Settings
-    ENV: Literal["dev", "prod"]
+    ENV: Literal["dev", "prod"] = "prod"
 
     # Authentication Settings
     SECRET_KEY: str
-    ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 48 * 60  # 2 days
 
     # Database Settings
     POSTGRES_HOST: str
@@ -39,4 +39,4 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
 
 
-settings = Settings()
+settings = Settings() # type: ignore noqa: PGH004
