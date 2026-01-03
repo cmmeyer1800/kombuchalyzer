@@ -5,7 +5,7 @@ from kbalyzer.lifespan import lifespan
 from kbalyzer.logging import get_logger
 from kbalyzer.models.general import Health
 from kbalyzer.routes.api import router as api_router
-from kbalyzer.routes.auth import nonapi_auth_router
+from kbalyzer.settings import settings
 
 logger = get_logger(__name__)
 
@@ -39,7 +39,10 @@ app = FastAPI(
 logger.info("Application created")
 
 app.include_router(api_router)
-app.include_router(nonapi_auth_router)
+
+if settings.ENV == "dev":
+    from kbalyzer.routes.auth import nonapi_auth_router
+    app.include_router(nonapi_auth_router)
 
 @app.get("/health", tags=["general"])
 def health() -> Health:
