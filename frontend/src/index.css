@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(calc(-50vh)) translateX(var(--drift, 0px));
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(calc(-100vh - 100px)) translateX(var(--drift, 0px));
+    opacity: 0;
+  }
+}

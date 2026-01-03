@@ -1,0 +1,1 @@
+"""Pydantic modesl for Kombuchalyzer."""

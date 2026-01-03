@@ -1,0 +1,1 @@
+"""Kombuchalyzer database schemas."""
