@@ -42,28 +42,28 @@ spec:
                 secretKeyRef:
                   key: host
                   name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- else }}
+              {{- end }}
             - name: POSTGRES_DB
               {{- if .Values.postgres.enabled }}
               valueFrom:
                 secretKeyRef:
                   key: dbname
                   name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- else }}
+              {{- end }}
             - name: POSTGRES_USER
               {{- if .Values.postgres.enabled }}
               valueFrom:
                 secretKeyRef:
                   key: user
                   name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- else }}
+              {{- end }}
             - name: POSTGRES_PASSWORD
               {{- if .Values.postgres.enabled }}
               valueFrom:
                 secretKeyRef:
                   key: password
                   name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- else }}
+              {{- end }}
             - name: SECRET
               valueFrom:
                 secretKeyRef:
