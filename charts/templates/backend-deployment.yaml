@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kombuchalyzer.fullname" . }}
+  labels:
+    {{- include "kombuchalyzer.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "kombuchalyzer.name" . }}-backend
+      app.kubernetes.io/instance: {{ .Release.Name }}-backend
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kombuchalyzer.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.backend.image.registry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          env:
+            - name: POSTGRES_HOST
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- end }}
+            - name: POSTGRES_DB
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- end }}
+            - name: POSTGRES_USER
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- end }}
+            - name: POSTGRES_PASSWORD
+              {{- if .Values.postgres.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
+              {{- end }}
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.existingSecret }}
+                  key: {{ .Values.backend.secretKey }}
+            - name: FIRST_SUPERUSER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.existingSecret }}
+                  key: {{ .Values.backend.firstSuperuserEmailKey }}
+            - name: FIRST_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.existingSecret }}
+                  key: {{ .Values.backend.firstSuperuserPasswordKey }}
+
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+  
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -5,15 +5,6 @@
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
 
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
-image:
-  registry: ghcr.io
-  repository: cmmeyer1800/kombuchalyzer-backend
-  # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
@@ -41,7 +32,6 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 80
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -94,10 +84,27 @@ backend:
   firstSuperuserEmailKey:
   firstSuperuserPasswordKey:
 
+  image:
+    registry: ghcr.io
+    repository: cmmeyer1800/kombuchalyzer-backend
+    # This sets the pull policy for images.
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+frontend:
+  image:
+    registry: ghcr.io
+    repository: cmmeyer1800/kombuchalyzer-frontend
+    # This sets the pull policy for images.
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
 postgres:
   enabled: false
   storage:
-    size: 16Gi
-    storageClass: longhorn2
+    size: 2Gi
+    storageClass: ""
   image:
     repository: ""
