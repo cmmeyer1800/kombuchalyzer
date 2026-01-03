@@ -38,67 +38,23 @@ spec:
           {{- end }}
           image: "{{ .Values.frontend.image.registry }}/{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
-          env:
-            - name: POSTGRES_HOST
-              {{- if .Values.postgres.enabled }}
-              valueFrom:
-                secretKeyRef:
-                  key: host
-                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- end }}
-            - name: POSTGRES_DB
-              {{- if .Values.postgres.enabled }}
-              valueFrom:
-                secretKeyRef:
-                  key: dbname
-                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- end }}
-            - name: POSTGRES_USER
-              {{- if .Values.postgres.enabled }}
-              valueFrom:
-                secretKeyRef:
-                  key: user
-                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- end }}
-            - name: POSTGRES_PASSWORD
-              {{- if .Values.postgres.enabled }}
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: {{ include "kombuchalyzer.fullname" . }}-postgres-app
-              {{- end }}
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.existingSecret }}
-                  key: {{ .Values.backend.secretKey }}
-            - name: FIRST_SUPERUSER_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.existingSecret }}
-                  key: {{ .Values.backend.firstSuperuserEmailKey }}
-            - name: FIRST_SUPERUSER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.existingSecret }}
-                  key: {{ .Values.backend.firstSuperuserPasswordKey }}
 
           ports:
             - name: http
-              containerPort: 8000
+              containerPort: 80
               protocol: TCP
 
           livenessProbe:
             httpGet:
               path: /health
-              port: 8000
+              port: 80
             initialDelaySeconds: 10
             periodSeconds: 10
 
           readinessProbe:
             httpGet:
               path: /health
-              port: 8000
+              port: 80
             initialDelaySeconds: 20
             periodSeconds: 10
   
