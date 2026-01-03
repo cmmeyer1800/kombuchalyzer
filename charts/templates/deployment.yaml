@@ -68,17 +68,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.backend.existingSecret }}
-                  key: secret_key
+                  key: {{ .Values.backend.secretKey }}
             - name: FIRST_SUPERUSER_EMAIL
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.backend.existingSecret }}
-                  key: first_superuser_email_key
+                  key: {{ .Values.backend.firstSuperuserEmailKey }}
             - name: FIRST_SUPERUSER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.backend.existingSecret }}
-                  key: first_superuser_password_key
+                  key: {{ .Values.backend.firstSuperuserPasswordKey }}
 
           ports:
             - name: http

@@ -90,9 +90,9 @@ serverConfig:
 backend:
   existingSecret: ""
   # MUST override
-  secret_key:
-  first_superuser_email_key:
-  first_superuser_password_key:
+  secretKey:
+  firstSuperuserEmailKey:
+  firstSuperuserPasswordKey:
 
 postgres:
   enabled: false
