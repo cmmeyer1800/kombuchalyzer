@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kombuchalyzer.fullname" . }}
+  name: {{ include "kombuchalyzer.fullname" . }}-backend
   labels:
     {{- include "kombuchalyzer.labels" . | nindent 4 }}
 spec:
