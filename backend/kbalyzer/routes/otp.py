@@ -6,7 +6,7 @@ import pyotp
 import qrcode
 from fastapi import APIRouter, Depends, Response
 
-from kbalyzer.db.crud.user import get_current_user, UserCRUD
+from kbalyzer.db.crud.user import UserCRUD, get_current_user
 from kbalyzer.db.schemas.user import UserSchema
 from kbalyzer.models.auth import OTPSubmission
 

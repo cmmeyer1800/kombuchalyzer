@@ -7,6 +7,7 @@ from alembic import context
 
 from kbalyzer.db.postgres import Base
 from kbalyzer.db.schemas.user import UserSchema
+from kbalyzer.db.schemas.brews import Brew
 from kbalyzer.settings import settings
 
 # this is the Alembic Config object, which provides
